@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guerre des Clans</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <div class="welcome-screen" id="welcome-screen">
+            <h1>Guerre des Clans</h1>
+            <div class="player-setup">
+                <div class="player-form" id="player1-form">
+                    <h2>Joueur 1</h2>
+                    <input type="text" id="player1-name" placeholder="Nom du joueur" required>
+                    <div class="clan-selection">
+                        <h3>Choisissez votre clan</h3>
+                        <div class="clan-options">
+                            <div class="clan-option" data-clan="montagnes">
+                                <img src="assets/clans/montagnes.png" alt="Clan des Montagnes">
+                                <h4>Clan des Montagnes</h4>
+                                <p>3 Guerriers, 2 Archers, 1 Mage</p>
+                                <p>Avantage: Défense renforcée</p>
+                            </div>
+                            <div class="clan-option" data-clan="plaines">
+                                <img src="assets/clans/plaines.png" alt="Clan des Plaines">
+                                <h4>Clan des Plaines</h4>
+                                <p>2 Guerriers, 3 Archers, 1 Mage</p>
+                                <p>Avantage: Attaques à distance précises</p>
+                            </div>
+                            <div class="clan-option" data-clan="sages">
+                                <img src="assets/clans/sages.png" alt="Clan des Sages">
+                                <h4>Clan des Sages</h4>
+                                <p>1 Guerrier, 2 Archers, 3 Mages</p>
+                                <p>Avantage: Sorts puissants, faible défense</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="player-form" id="player2-form">
+                    <h2>Joueur 2</h2>
+                    <input type="text" id="player2-name" placeholder="Nom du joueur" required>
+                    <div class="clan-selection">
+                        <h3>Choisissez votre clan</h3>
+                        <div class="clan-options">
+                            <div class="clan-option" data-clan="montagnes">
+                                <img src="assets/clans/montagnes.png" alt="Clan des Montagnes">
+                                <h4>Clan des Montagnes</h4>
+                                <p>3 Guerriers, 2 Archers, 1 Mage</p>
+                                <p>Avantage: Défense renforcée</p>
+                            </div>
+                            <div class="clan-option" data-clan="plaines">
+                                <img src="assets/clans/plaines.png" alt="Clan des Plaines">
+                                <h4>Clan des Plaines</h4>
+                                <p>2 Guerriers, 3 Archers, 1 Mage</p>
+                                <p>Avantage: Attaques à distance précises</p>
+                            </div>
+                            <div class="clan-option" data-clan="sages">
+                                <img src="assets/clans/sages.png" alt="Clan des Sages">
+                                <h4>Clan des Sages</h4>
+                                <p>1 Guerrier, 2 Archers, 3 Mages</p>
+                                <p>Avantage: Sorts puissants, faible défense</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button id="start-game-btn">Commencer la bataille</button>
+        </div>
+
+        <div class="game-container" id="game-container" style="display: none;">
+            <div class="game-header">
+                <div class="player-info" id="player1-info">
+                    <h2 id="player1-display"></h2>
+                    <div class="clan-badge" id="player1-clan"></div>
+                </div>
+                <div class="game-status">
+                    <h1>Guerre des Clans</h1>
+                    <div class="turn-info">
+                        <div>Tour de: <span id="current-player"></span></div>
+                        <div>Phase: <span id="game-phase"></span></div>
+                    </div>
+                </div>
+                <div class="player-info" id="player2-info">
+                    <h2 id="player2-display"></h2>
+                    <div class="clan-badge" id="player2-clan"></div>
+                </div>
+            </div>
+
+            <div class="game-main">
+                <div class="game-board-container">
+                    <div class="game-board-wrapper">
+                        <div id="wall-timer" class="wall-timer">
+                            Prochaine réduction du terrain dans : <span id="wall-turns-left">5</span> tours
+                        </div>
+                        <div class="game-board" id="game-board"></div>
+                    </div>
+                    <div class="unit-panels-wrapper">
+                    <!-- Panel 1 -->
+                    <div class="unit-panel" id="unit-panel">
+                        <h3>Informations de l'unité</h3>
+                        <div class="unit-display">
+                            <img id="unit-image" src="" alt="Unité">
+                            <div class="unit-stats">
+                                <h4 id="unit-name"></h4>
+                                <div class="hp-bar">
+                                    <div class="hp-fill" id="hp-fill"></div>
+                                     <span id="hp-text"></span>
+                                </div>
+                                <p>Attaque: <span id="unit-attack" style="margin-top: 1px;"></span></p>
+                                <p>Défense: <span id="unit-defense"></span></p>
+                                <p>Portée: <span id="unit-range"></span></p>
+                                <p>Super-pouvoir: <span id="unit-sp"></span></p>
+                                <p id="unit-special" style="color: blueviolet;"></p>
+                            </div>
+                        </div>
+                        <div class="unit-actions" id="unit-actions"></div>
+                    </div>
+
+                    <div class="unit-panel2" id="unit-panel2">
+                        <h3>Informations de la 2ème unité</h3>
+                        <div class="unit-display">
+                            <img id="unit-image2" src="" alt="Unité">
+                            <div class="unit-stats">
+                                <h4 id="unit-name2"></h4>
+                                <div class="hp-bar">
+                                    <div class="hp-fill" id="hp-fill2"></div>
+                                    <span id="hp-text2"></span>
+                                </div>
+                                <p>Attaque: <span id="unit-attack2" style="margin-top: 1px;"></span></p>
+                                <p>Défense: <span id="unit-defense2"></span></p>
+                                <p>Portée: <span id="unit-range2"></span></p>
+                                <p>Super-pouvoir: <span id="unit-sp2"></span></p>
+                                <p id="unit-special2" style="color: blueviolet;"></p>
+                            </div>
+                        </div>
+                        <div class="unit-actions" id="unit-actions2"></div>
+                    </div>
+                </div>
+
+                </div>
+
+                <div class="game-controls">
+                    <button id="end-turn-btn" disabled>Terminer le tour</button>
+                    <button id="restart-btn" >Nouvelle partie</button>
+                    <button id="end-movement-btn" style="display: none;">Finir la phase de mouvement</button>
+                    <div class="dice-roller" id="dice-roller">
+                        <div class="dice" id="dice">?</div>
+                        <button id="roll-dice-btn" >Lancer le dé</button>
+                    </div>
+                </div>
+                <hr style="border: none; height: 4px; background-color: #2c3e50;">
+                <h3>Journal de combat</h3>
+                <hr style="border: none;height: 1px;background-color: black;margin-top: -10px;width: 200px;">
+
+                <div class="combat-log" id="combat-log">
+                    <div id="log-content" class="log-scroll"></div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="game-over-screen" id="game-over-screen" style="display: none;">
+            <h1 id="victory-message"></h1>
+            <div id="winner-display"></div>
+            <img id="winner-image" src="" alt="Image du gagnant" style="max-width: 800px; margin: 20px auto; display: block; margin-bottom: 100px;">
+            <button id="play-again-btn">Jouer à nouveau</button>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
