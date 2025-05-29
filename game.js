@@ -234,7 +234,14 @@ document.addEventListener('DOMContentLoaded', () => {
         updatePlayerDisplay();
         gameState.gamePhase = 'placement';
         gamePhaseDisplay.textContent = 'Phase de placement';
-        addToCombatLog(`🏁♟️${gameState.players[gameState.currentPlayer].name} commence la phase de placement.`);
+        addToCombatLog(`🏁${gameState.players[gameState.currentPlayer].name} commence la phase de placement.`);
+        const nextunitType = getNextUnitToPlace(gameState.players[gameState.currentPlayer]);
+            if (!nextunitType) {
+                //addToCombatLog('🧩Toutes vos unités ont été placées.');
+                return;
+            }
+            const unitLabel = gameState.unitTypes[nextunitType].name;
+            addToCombatLog(`♟️${gameState.players[gameState.currentPlayer].name} prépare à placer un(e) ${unitLabel}.`);
     }
 
 function waitForPlayerRoll(playerNumber) {
@@ -320,6 +327,7 @@ function waitForPlayerRoll(playerNumber) {
             addToCombatLog('🧩Toutes vos unités ont été placées.');
             return;
         }
+
         const allUnits = getAllUnits();
         const unitsInCell = allUnits.filter(u => u.row === row && u.col === col);
 
@@ -327,6 +335,7 @@ function waitForPlayerRoll(playerNumber) {
             addToCombatLog("❌ Maximum 2 unités par case !");
             return;
         }
+        
         const unitId = `player${gameState.currentPlayer}-${unitType}-${Date.now()}`;
         const unit = {
             id: unitId,
@@ -351,6 +360,13 @@ function waitForPlayerRoll(playerNumber) {
                 gameState.currentPlayer = otherPlayerId;
                 updatePlayerDisplay();
                 addToCombatLog(`♟️${gameState.players[gameState.currentPlayer].name}, placez maintenant vos unités.`);
+                const nextunitType = getNextUnitToPlace(gameState.players[gameState.currentPlayer]);
+                if (!nextunitType) {
+                    //addToCombatLog('🧩Toutes vos unités ont été placées.');
+                    return;
+                }
+                const unitLabel = gameState.unitTypes[nextunitType].name;
+                addToCombatLog(`♟️${gameState.players[gameState.currentPlayer].name}, placez maintenant vos unités, prépare à placer un(e) ${unitLabel}.`);
             } else {
                 gameState.currentPlayer = gameState.initialPlayer;
                 updatePlayerDisplay();
@@ -361,8 +377,15 @@ function waitForPlayerRoll(playerNumber) {
                 endTurnBtn.disabled = false;
                 addToCombatLog(`✅Toutes les unités sont en place. 🏁${gameState.players[gameState.currentPlayer].name} commence !`);
             }
-}
     }
+            const nextunitType = getNextUnitToPlace(player);
+                if (!nextunitType) {
+                    //addToCombatLog('🧩Toutes vos unités ont été placées.');
+                    return;
+                }
+                const unitLabel = gameState.unitTypes[unitType].name;
+                addToCombatLog(`♟️${player.name} prépare à placer un(e) ${unitLabel}.`);
+            }
 
     function getAllUnits() {
     return [...gameState.players[1].units, ...gameState.players[2].units];
@@ -1111,15 +1134,21 @@ function resetGame() {
     document.querySelectorAll('.cell.wall-zone').forEach(cell => {
         cell.classList.remove('wall-zone');
     });
+  
+    createGameBoard();
+    const wallTimerDiv = document.getElementById("wall-timer");
 
-    const wallText = document.getElementById("wall-turns-left");
-    if (wallText) wallText.textContent = "5";
+    if (wallTimerDiv) {
+        wallTimerDiv.innerHTML = `
+            🧱 Prochaine réduction du terrain dans : <span id="wall-turns-left">5</span> tours
+        `;
+    }
+
+
     updateWallTimer();
 
     addToCombatLog('🔁 Le jeu a été réinitialisé.');
 
-    createGameBoard();
-    
     startGame();
       
 }
@@ -1207,7 +1236,7 @@ function updateWallTimer() {
     if (nextThreshold) {
         wallText.textContent = turnsLeft;
     } else {
-        wallTimerDiv.textContent = "🧱 Toutes les zones sont désormais fermées.";
+        wallTimerDiv.innerHTML = "🧱 Toutes les zones sont désormais fermées.";
     }
 }
 
